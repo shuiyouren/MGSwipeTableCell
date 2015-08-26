@@ -9,6 +9,7 @@
 /** Used to capture table input while swipe buttons are visible*/
 @interface MGSwipeTableInputOverlay : UIView
 @property (nonatomic, weak) MGSwipeTableCell * currentCell;
+@property (nonatomic, weak) UIView *eventIgnoreView;
 @end
 
 @implementation MGSwipeTableInputOverlay
@@ -18,6 +19,9 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        UIView *subView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self addSubview:subView];
+        _eventIgnoreView = subView;
     }
     return self;
 }
@@ -35,7 +39,7 @@
     if (hide) {
         [_currentCell hideSwipeAnimated:YES];
     }
-    return nil; //return nil to allow swiping a new cell while the current one is hidding
+    return _eventIgnoreView; //return eventIgnoreView to put away the touch event.
 }
 
 @end
